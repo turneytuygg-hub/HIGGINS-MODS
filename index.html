@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HIGGINS MODS - Modded APK Downloads</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📱</text></svg>">
+</head>
+<body>
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <h3 class="modal-title">Admin Login</h3>
+            <div class="form-group">
+                <label class="form-label" for="loginUsername">Username</label>
+                <input type="text" id="loginUsername" class="form-control" placeholder="Enter admin username">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" class="form-control" placeholder="Enter admin password">
+            </div>
+            <div class="status-message" id="loginStatus"></div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="loginAdmin()">Login</button>
+            <p style="margin-top: 15px; text-align: center; color: var(--text-secondary); font-size: 0.9rem;">
+                Default credentials: admin 254 / admin 254
+            </p>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">HIGGINS <span>MODS</span></div>
+                <div class="admin-controls">
+                    <button class="btn btn-secondary" id="contactBtn">
+                        <i class="fas fa-comment-alt"></i> Contact Admin
+                    </button>
+                    <button class="btn btn-primary luminous-border" id="adminLoginBtn">
+                        <i class="fas fa-user-shield"></i> Admin Login
+                    </button>
+                    <button class="btn btn-secondary" id="adminPanelBtn" style="display: none;">
+                        <i class="fas fa-cogs"></i> Admin Panel
+                    </button>
+                    <button class="btn btn-secondary" id="logoutBtn" style="display: none;">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Admin Panel -->
+        <section class="admin-panel" id="adminPanel">
+            <h2 class="section-title">Admin Panel</h2>
+            <div class="status-message" id="adminStatus"></div>
+            
+            <div class="form-group">
+                <label class="form-label" for="apkName">APK Name</label>
+                <input type="text" id="apkName" class="form-control" placeholder="Enter APK name">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="apkVersion">Version</label>
+                <input type="text" id="apkVersion" class="form-control" placeholder="Enter version (e.g., 2.5.1)">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="apkDescription">Description</label>
+                <textarea id="apkDescription" class="form-control" rows="3" placeholder="Enter APK description"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="apkSize">File Size (MB)</label>
+                <input type="number" id="apkSize" class="form-control" placeholder="Enter file size in MB">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="apkFile">APK File</label>
+                <input type="file" id="apkFile" class="form-control" accept=".apk">
+                <small style="color: var(--text-secondary); display: block; margin-top: 5px;">
+                    Only .apk files are allowed. Users will not be able to upload files.
+                </small>
+            </div>
+            
+            <button class="btn btn-primary luminous-border" onclick="uploadAPK()">
+                <i class="fas fa-upload"></i> Upload APK
+            </button>
+            
+            <hr style="margin: 30px 0; border-color: var(--dark-border);">
+            
+            <h3 style="margin-bottom: 15px; color: var(--accent-luminous);">Change Admin Password</h3>
+            <div class="form-group">
+                <label class="form-label" for="adminEmail">Admin Email</label>
+                <input type="email" id="adminEmail" class="form-control" value="nicekingkeng@gmail.com" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="newPassword">New Password</label>
+                <input type="password" id="newPassword" class="form-control" placeholder="Enter new password">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm new password">
+            </div>
+            
+            <button class="btn btn-primary" onclick="changePassword()">
+                <i class="fas fa-key"></i> Change Password
+            </button>
+        </section>
+
+        <!-- APK Listings -->
+        <section>
+            <h2 class="section-title">Available Modded APKs</h2>
+            <div class="apk-list" id="apkList">
+                <!-- APK cards will be dynamically generated here -->
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="contact-section" id="contactSection">
+            <h2 class="section-title">Contact Admin</h2>
+            <p style="margin-bottom: 20px; color: var(--text-secondary);">
+                Need help or have questions about our modded APKs? Contact the admin directly via WhatsApp.
+            </p>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fab fa-whatsapp contact-icon"></i>
+                    <div>
+                        <div style="font-weight: 500; color: var(--accent-luminous);">WhatsApp</div>
+                        <div>+254 7940 99637</div>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope contact-icon"></i>
+                    <div>
+                        <div style="font-weight: 500; color: var(--accent-luminous);">Email</div>
+                        <div>nicekingkeng@gmail.com</div>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-info-circle contact-icon"></i>
+                    <div>
+                        <div style="font-weight: 500; color: var(--accent-luminous);">Note</div>
+                        <div>Only admin can upload APKs</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; <span id="currentYear"></span> HIGGINS MODS. All rights reserved.</p>
+            <p style="margin-top: 10px; font-size: 0.8rem; color: var(--text-secondary);">
+                This site provides modded APK files for educational purposes only. Use at your own risk.
+            </p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

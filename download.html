@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Download</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .download-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .download-section {
+            margin: 30px 0;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border: 2px dashed #dee2e6;
+        }
+
+        .method-title {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .file-info {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4CAF50;
+            text-align: left;
+        }
+
+        .file-info h3 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .file-info p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(76, 175, 80, 0.2);
+        }
+
+        .download-btn:active {
+            transform: translateY(0);
+        }
+
+        .download-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .download-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .advanced-section {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .advanced-title {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .custom-file {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .custom-file input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .custom-file button {
+            padding: 12px 20px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        .custom-file button:hover {
+            background: #1976D2;
+        }
+
+        .status-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+            font-weight: 600;
+        }
+
+        .status-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .status-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        .tips {
+            margin-top: 25px;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 10px;
+            text-align: left;
+        }
+
+        .tips h3 {
+            color: #1565c0;
+            margin-bottom: 10px;
+        }
+
+        .tips ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .tips li {
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 14px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .tips li:before {
+            content: "✓";
+            color: #4CAF50;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .browser-compatibility {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            font-size: 24px;
+        }
+
+        .browser-icon {
+            color: #666;
+            transition: color 0.3s ease;
+        }
+
+        .browser-icon.supported {
+            color: #4CAF50;
+        }
+
+        footer {
+            margin-top: 30px;
+            color: #666;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="download-container">
+        <h1>📥 File Download Center</h1>
+        <p class="subtitle">Download files directly to your device with one click</p>
+        
+        <div class="download-section">
+            <h2 class="method-title">Pre-configured File Download</h2>
+            <div class="file-info">
+                <h3>Sample Document</h3>
+                <p>File: sample-document.pdf | Size: 2.1 MB | Type: PDF Document</p>
+            </div>
+            <button id="downloadBtn" class="download-btn">
+                <svg class="download-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                </svg>
+                Download Sample PDF
+            </button>
+        </div>
+
+        <div class="advanced-section">
+            <h2 class="advanced-title">Custom File Download</h2>
+            <div class="custom-file">
+                <input type="text" id="customFileName" placeholder="Enter filename (e.g., document.pdf)">
+                <button onclick="createCustomFile()">Create & Download</button>
+            </div>
+            <div class="custom-file">
+                <input type="text" id="customFileContent" placeholder="Enter file content">
+                <button onclick="downloadTextFile()">Download as Text</button>
+            </div>
+        </div>
+
+        <div id="statusMessage" class="status-message"></div>
+
+        <div class="tips">
+            <h3>💡 Download Tips for Chrome Users:</h3>
+            <ul>
+                <li>Make sure pop-ups are allowed for this site</li>
+                <li>Check your Downloads folder if file doesn't appear</li>
+                <li>For large files, wait for download to complete</li>
+                <li>You can also right-click and "Save link as..."</li>
+            </ul>
+        </div>
+
+        <div class="browser-compatibility">
+            <span class="browser-icon supported" title="Chrome">🌐</span>
+            <span class="browser-icon supported" title="Firefox">🦊</span>
+            <span class="browser-icon supported" title="Edge">🚀</span>
+        </div>
+
+        <footer>
+            <p>This download page works on all modern browsers including Google Chrome</p>
+            <p>Files are downloaded directly to your default download location</p>
+        </footer>
+    </div>
+
+    <script>
+        // Pre-configured file download
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            downloadFile(
+                'sample-document.pdf',
+                'This is a sample PDF document content. In a real scenario, this would be your actual file data or blob.\n\n' +
+                'File Information:\n' +
+                '• Created: ' + new Date().toLocaleDateString() + '\n' +
+                '• Size: 2.1 MB\n' +
+                '• Type: PDF Document\n' +
+                '• Description: Sample file for demonstration purposes\n\n' +
+                'Thank you for downloading!',
+                'application/pdf'
+            );
+        });
+
+        // Main download function with multiple fallback methods
+        function downloadFile(filename, content, mimeType = 'application/octet-stream') {
+            const btn = document.getElementById('downloadBtn');
+            const originalText = btn.innerHTML;
+            const statusMessage = document.getElementById('statusMessage');
+            
+            // Show downloading status
+            btn.innerHTML = '⏳ Downloading...';
+            btn.disabled = true;
+            statusMessage.className = 'status-message';
+            statusMessage.textContent = '';
+
+            try {
+                // Method 1: Create blob and download (modern browsers)
+                const blob = new Blob([content], { type: mimeType });
+                
+                // Method 1a: Use createObjectURL with anchor tag (most compatible)
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                
+                // Trigger download
+                a.click();
+                
+                // Cleanup
+                setTimeout(() => {
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                    
+                    // Show success message
+                    statusMessage.className = 'status-message success';
+                    statusMessage.textContent = '✅ Download started successfully! Check your downloads folder.';
+                    
+                    // Reset button after delay
+                    setTimeout(() => {
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                    }, 2000);
+                }, 100);
+                
+            } catch (error) {
+                console.error('Download error:', error);
+                
+                // Fallback method for older browsers
+                try {
+                    // Method 2: Data URL approach
+                    const dataUrl = 'data:' + mimeType + ';base64,' + btoa(unescape(encodeURIComponent(content)));
+                    window.open(dataUrl, '_blank');
+                    
+                    statusMessage.className = 'status-message success';
+                    statusMessage.textContent = '✅ File opened in new window. Use "Save As" to download.';
+                } catch (fallbackError) {
+                    // Method 3: Last resort - prompt user to save
+                    statusMessage.className = 'status-message error';
+                    statusMessage.textContent = '⚠️ Please right-click and select "Save link as..." to download the file.';
+                }
+                
+                // Reset button
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        // Create and download custom file
+        function createCustomFile() {
+            const filenameInput = document.getElementById('customFileName');
+            const filename = filenameInput.value.trim();
+            
+            if (!filename) {
+                showError('Please enter a filename');
+                return;
+            }
+            
+            const content = `This is your custom file: ${filename}\n\n` +
+                           `Created on: ${new Date().toLocaleString()}\n` +
+                           `Thank you for using our download service!`;
+            
+            // Determine MIME type based on extension
+            const extension = filename.split('.').pop().toLowerCase();
+            const mimeTypes = {
+                'pdf': 'application/pdf',
+                'txt': 'text/plain',
+                'json': 'application/json',
+                'csv': 'text/csv',
+                'html': 'text/html',
+                'xml': 'application/xml',
+                'jpg': 'image/jpeg',
+                'jpeg': 'image/jpeg',
+                'png': 'image/png',
+                'zip': 'application/zip'
+            };
+            
+            const mimeType = mimeTypes[extension] || 'application/octet-stream';
+            
+            downloadFile(filename, content, mimeType);
+            filenameInput.value = '';
+        }
+
+        // Download text content as file
+        function downloadTextFile() {
+            const contentInput = document.getElementById('customFileContent');
+            const content = contentInput.value.trim();
+            
+            if (!content) {
+                showError('Please enter some content');
+                return;
+            }
+            
+            const filename = `document-${Date.now()}.txt`;
+            downloadFile(filename, content, 'text/plain');
+            contentInput.value = '';
+        }
+
+        // Show error message
+        function showError(message) {
+            const statusMessage = document.getElementById('statusMessage');
+            statusMessage.className = 'status-message error';
+            statusMessage.textContent = '⚠️ ' + message;
+            setTimeout(() => {
+                statusMessage.className = 'status-message';
+            }, 3000);
+        }
+
+        // Check browser compatibility
+        function checkBrowserCompatibility() {
+            const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+            const statusMessage = document.getElementById('statusMessage');
+            
+            if (isChrome) {
+                statusMessage.className = 'status-message success';
+                statusMessage.textContent = '✅ Chrome browser detected - Download feature fully supported!';
+                setTimeout(() => {
+                    statusMessage.className = 'status-message';
+                }, 3000);
+            }
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', checkBrowserCompatibility);
+
+        // Add Enter key support for input fields
+        document.getElementById('customFileName').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') createCustomFile();
+        });
+
+        document.getElementById('customFileContent').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') downloadTextFile();
+        });
+    </script>
+</body>
+  </html>
